@@ -41,6 +41,7 @@ class NewDataPullPayload(BaseTxPayload):
     total_holdings: Optional[float]
     total_value_usd: Optional[float]
     market_cap_dominance: Optional[float]
+    public_company_holdings_ipfs_hash: Optional[float]
 
 
 @dataclass(frozen=True)

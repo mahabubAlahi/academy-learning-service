@@ -98,6 +98,11 @@ class SynchronizedData(BaseSynchronizedData):
     def market_cap_dominance(self) -> Optional[float]:
         """Get the market_cap_dominance."""
         return self.db.get("market_cap_dominance", None)
+    
+    @property
+    def public_company_holdings_ipfs_hash(self) -> Optional[float]:
+        """Get the public_company_holdings_ipfs_hash."""
+        return self.db.get("public_company_holdings_ipfs_hash", None)
 
     @property
     def participant_to_data_round(self) -> DeserializedCollection:
@@ -160,6 +165,7 @@ class NewDataPullRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.total_holdings),
         get_name(SynchronizedData.total_value_usd),
         get_name(SynchronizedData.market_cap_dominance),
+        get_name(SynchronizedData.public_company_holdings_ipfs_hash),
     )
 
     # Event.ROUND_TIMEOUT  # this needs to be referenced for static checkers
