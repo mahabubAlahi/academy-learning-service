@@ -302,6 +302,9 @@ class NewDataPullBehaviour(LearningBaseBehaviour):  # pylint: disable=too-many-a
 
             self.context.logger.info(f"Got public company holding from Coingecko: {response}")
 
+            # Store the public company holdings data in IPFS
+            public_company_holdings_ipfs_hash = yield from self.send_public_company_holdings_to_ipfs(response)
+
             # Prepare the payload to be shared with other agents
             # After consensus, all the agents will have the same total_holdings, total_value_usd and market_cap_dominance variables in their synchronized data
             payload = NewDataPullPayload(
@@ -309,6 +312,7 @@ class NewDataPullBehaviour(LearningBaseBehaviour):  # pylint: disable=too-many-a
                 total_holdings=response["total_holdings"],
                 total_value_usd=response["total_value_usd"],
                 market_cap_dominance=response["market_cap_dominance"],
+                public_company_holdings_ipfs_hash=public_company_holdings_ipfs_hash
             )
 
         # Send the payload to all agents and mark the behaviour as done
@@ -332,6 +336,16 @@ class NewDataPullBehaviour(LearningBaseBehaviour):  # pylint: disable=too-many-a
 
         self.context.logger.info(f"Got public company holding from Coingecko: {response}")
         return response
+    
+    def send_public_company_holdings_to_ipfs(self, data) -> Generator[None, None, Optional[str]]:
+        """Store the public company holdings in IPFS"""
+        public_company_holdings_ipfs_hash = yield from self.send_to_ipfs(
+            filename=self.metadata_filepath, obj=data, filetype=SupportedFiletype.JSON
+        )
+        self.context.logger.info(
+            f"Public company holdings data stored in IPFS: https://gateway.autonolas.tech/ipfs/{public_company_holdings_ipfs_hash}"
+        )
+        return public_company_holdings_ipfs_hash
 
 class DecisionMakingBehaviour(
     LearningBaseBehaviour
