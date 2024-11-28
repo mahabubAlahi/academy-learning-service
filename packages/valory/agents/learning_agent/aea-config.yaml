@@ -32,8 +32,8 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidz54kvxhbdmpruzguuzzq7bjg4pekjb5amqobkxoy4oqknnobopu
 - valory/abstract_round_abci:0.1.0:bafybeiajjzuh6vf23crp55humonknirvv2f4s3dmdlfzch6tc5ow52pcgm
-- valory/learning_abci:0.1.0:bafybeibxgae2nfwsmbg7tyj6mfxjl3nmv4fgep5yb4ser3p7vatq3wpzni
-- valory/learning_chained_abci:0.1.0:bafybeifciytgcii3d33zauptglelwh7kdc72y7puppo66uv5zp2o5zkqve
+- valory/learning_abci:0.1.0:bafybeidrfkezuqr73vu77jfdvrjvs25tpclo46ztu7f5ect2fifhr4vjb4
+- valory/learning_chained_abci:0.1.0:bafybeigqkw4uhhywcqklqvbjmumd747i4fiwjssfiv2p4z3cz44qbvqyri
 - valory/registration_abci:0.1.0:bafybeiffipsowrqrkhjoexem7ern5ob4fabgif7wa6gtlszcoaop2e3oey
 - valory/reset_pause_abci:0.1.0:bafybeif4lgvbzsmzljesxbphycdv52ka7qnihyjrjpfaseclxadcmm6yiq
 - valory/termination_abci:0.1.0:bafybeiekkpo5qef5zaeagm3si6v45qxcojvtjqe4a5ceccvk4q7k3xi3bi
@@ -204,6 +204,7 @@ models:
       default_chain_id: ${str:gnosis}
       termination_from_block: ${int:34088325}
       transfer_target_address: ${str:0x0000000000000000000000000000000000000000}
+      trigger: ${bool:false}
       olas_token_address: ${str:0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f}
   coingecko_specs:
     args:

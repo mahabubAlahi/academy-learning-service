@@ -38,6 +38,7 @@ from packages.valory.skills.learning_abci.payloads import (
     DataPullPayload,
     DecisionMakingPayload,
     NewDataPullPayload,
+    NewTxPreparationPayload,
     TxPreparationPayload,
 )
 
@@ -48,6 +49,7 @@ class Event(Enum):
     DONE = "done"
     ERROR = "error"
     TRANSACT = "transact"
+    NEW_TRANSACT = "new_transact"
     NO_MAJORITY = "no_majority"
     ROUND_TIMEOUT = "round_timeout"
 
@@ -210,6 +212,20 @@ class TxPreparationRound(CollectSameUntilThresholdRound):
     )
 
     # Event.ROUND_TIMEOUT  # this needs to be referenced for static checkers
+class NewTxPreparationRound(CollectSameUntilThresholdRound):
+    """NewTxPreparationRound"""
+
+    payload_class = NewTxPreparationPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_tx_round)
+    selection_key = (
+        get_name(SynchronizedData.tx_submitter),
+        get_name(SynchronizedData.most_voted_tx_hash),
+    )
+
+    # Event.ROUND_TIMEOUT  # this needs to be referenced for static checkers
 
 
 class FinishedDecisionMakingRound(DegenerateRound):
@@ -244,10 +260,16 @@ class LearningAbciApp(AbciApp[Event]):
             Event.DONE: FinishedDecisionMakingRound,
             Event.ERROR: FinishedDecisionMakingRound,
             Event.TRANSACT: TxPreparationRound,
+            Event.NEW_TRANSACT: NewTxPreparationRound,
         },
         TxPreparationRound: {
             Event.NO_MAJORITY: TxPreparationRound,
             Event.ROUND_TIMEOUT: TxPreparationRound,
+            Event.DONE: FinishedTxPreparationRound,
+        },
+        NewTxPreparationRound: {
+            Event.NO_MAJORITY: NewTxPreparationRound,
+            Event.ROUND_TIMEOUT: NewTxPreparationRound,
             Event.DONE: FinishedTxPreparationRound,
         },
         FinishedDecisionMakingRound: {},
