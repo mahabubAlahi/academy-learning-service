@@ -7,13 +7,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiho3lkochqpmes4f235chq26oggmwnol3vjuvhosleoubbjirbwaq
-  behaviours.py: bafybeiahkmrfkx76tgens7ko42cbob63nxd3evwd5cyzxfegrj3r7dgnl4
+  behaviours.py: bafybeicewaayaaxrtyjzkt4l3jznwwpho5llbauseqd22o7ycbvko7xrkm
   dialogues.py: bafybeifqjbumctlffx2xvpga2kcenezhe47qhksvgmaylyp5ypwqgfar5u
   fsm_specification.yaml: bafybeigbbydxuqephdpatb3fp3sxnvr77bfvvo5hwjimxfpgyl32wupe64
   handlers.py: bafybeigjadr4thz6hfpfx5abezbwnqhbxmachf4efasrn4z2vqhsqgnyvi
-  models.py: bafybeihags7dsqofbz5tgyxqepkjsvvkstyubim7hnxbin5l5jxlhqtzr4
-  payloads.py: bafybeiffmnbf3mqkuuophjuwli7fblldsfc7zje4mq7b3njgr3swicpkcq
-  rounds.py: bafybeifu5zvhrpehrovpskylsewlzo3mb6hu4tdmh3njkw33k3c2xqyk2q
+  models.py: bafybeig2ke67y5wkzem6kqyeyjd2mbw7lnrfmsukn2vohftzu7baycb63q
+  payloads.py: bafybeico7vgbndzndtgyn23btd7m73wrjhbdjyrmcgg4nrrq243rugwj7a
+  rounds.py: bafybeihmddp7hu7a2dhkksee6bgby64u4jkykxebbuesqtxif57nbrjl64
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
@@ -129,6 +129,7 @@ models:
       coingecko_price_template: https://api.coingecko.com/api/v3/simple/price?ids=autonolas&vs_currencies=usd&x_cg_demo_api_key={api_key}
       coingecko_api_key: null
       transfer_target_address: '0x0000000000000000000000000000000000000000'
+      trigger: false
       olas_token_address: '0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f'
       multisend_address: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761'
     class_name: Params
