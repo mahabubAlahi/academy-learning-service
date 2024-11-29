@@ -1,0 +1,31 @@
+name: counter
+author: valory
+version: 0.1.0
+type: contract
+description: Counter contract
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  README.md: bafybeicupvzoomkzigfqicpl4h5c3l7pq22t5yoezhjtopp63amcgyyvm4
+  __init__.py: bafybeihv3sezgp6dntliu3ep5sskriht3kfxk4hfrnwxwdhd6f4bt5hmte
+  build/Counter.json: bafybeig7go5asrnxfae6pyjde5jfp2vmo4ifgwx6plym6vruvijpnhv3tm
+  contract.py: bafybeiaju2qbfyfparrkkjij3u24bmsmy2x2hws2ofq5rwiyowdgji424m
+fingerprint_ignore_patterns: []
+contracts: []
+class_name: Counter
+contract_interface_paths:
+  ethereum: build/Counter.json
+dependencies:
+  ecdsa:
+    version: '>=0.15'
+  eth_typing: {}
+  hexbytes: {}
+  open-aea-ledger-ethereum:
+    version: ==1.57.0
+  open-aea-test-autonomy:
+    version: ==0.16.1
+  packaging: {}
+  requests:
+    version: ==2.28.1
+  web3:
+    version: <7,>=6.0.0
