@@ -7,7 +7,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeid42pdrf6qrohedylj4ijrss236ai6geqgf3he44huowiuf7pl464
 fingerprint_ignore_patterns: []
-agent: valory/learning_agent:0.1.0:bafybeidpsqnnt74sfxr2lrrlkr7ekphlb73k5jbtyzjjrpt4xmkgkgojre
+agent: valory/learning_agent:0.1.0:bafybeic3j2u4ebwpqa6fortx375w6wbqcbzyl4j4gtbi2msxcyauwjiwka
 number_of_agents: 4
 deployment:
   agent:
@@ -95,6 +95,7 @@ extra:
         transfer_target_address: ${TRANSFER_TARGET_ADDRESS:str:0x0000000000000000000000000000000000000000}
         trigger: ${TRIGGER:bool:false}
         olas_token_address: ${OLAS_TOKEN_ADDRESS:str:0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f}
+        counter_address: ${COUNTER_ADDRESS:str:0xbc588Df1B9D5a1dDBD20e65ab62e4bF4ce272cb0}
     coingecko_specs:
       args:
         api_id: coingecko
@@ -168,6 +169,7 @@ extra:
         transfer_target_address: ${TRANSFER_TARGET_ADDRESS:str:0x0000000000000000000000000000000000000000}
         trigger: ${TRIGGER:bool:false}
         olas_token_address: ${OLAS_TOKEN_ADDRESS:str:0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f}
+        counter_address: ${COUNTER_ADDRESS:str:0xbc588Df1B9D5a1dDBD20e65ab62e4bF4ce272cb0}
     coingecko_specs:
       args:
         api_id: coingecko
@@ -241,6 +243,7 @@ extra:
         transfer_target_address: ${TRANSFER_TARGET_ADDRESS:str:0x0000000000000000000000000000000000000000}
         trigger: ${TRIGGER:bool:false}
         olas_token_address: ${OLAS_TOKEN_ADDRESS:str:0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f}
+        counter_address: ${COUNTER_ADDRESS:str:0xbc588Df1B9D5a1dDBD20e65ab62e4bF4ce272cb0}
     coingecko_specs:
       args:
         api_id: coingecko
@@ -314,6 +317,7 @@ extra:
         transfer_target_address: ${TRANSFER_TARGET_ADDRESS:str:0x0000000000000000000000000000000000000000}
         trigger: ${TRIGGER:bool:false}
         olas_token_address: ${OLAS_TOKEN_ADDRESS:str:0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f}
+        counter_address: ${COUNTER_ADDRESS:str:0xbc588Df1B9D5a1dDBD20e65ab62e4bF4ce272cb0}
     coingecko_specs:
       args:
         api_id: coingecko

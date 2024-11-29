@@ -25,6 +25,7 @@ from pathlib import Path
 from tempfile import mkdtemp
 from typing import Dict, Generator, Optional, Set, Type, cast
 
+from packages.valory.contracts.counter.contract import Counter
 from packages.valory.contracts.erc20.contract import ERC20
 from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,
@@ -740,6 +741,12 @@ class NewTxPreparationBehaviour(
             # Get the transaction hash
             tx_hash = yield from self.get_tx_hash()
 
+            # Get the count value
+            count = yield from self.get_count()
+            self.context.logger.info(
+                f"Count value from the Counter Contract:- {count}"
+            )
+
             payload = NewTxPreparationPayload(
                 sender=sender, tx_submitter=self.auto_behaviour_id(), tx_hash=tx_hash
             )
@@ -838,6 +845,36 @@ class NewTxPreparationBehaviour(
         self.context.logger.info(f"Safe transaction hash is {safe_tx_hash}")
 
         return safe_tx_hash
+    
+    def get_count(self) -> Generator[None, None, Optional[float]]:
+        """Get Count value"""
+
+        # Use the contract api to interact with the Counter contract
+        response_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+            contract_address=self.params.counter_address,
+            contract_id=str(Counter.contract_id),
+            contract_callable="get_count",
+            chain_id=GNOSIS_CHAIN_ID,
+        )
+
+        # Check that the response is what we expect
+        if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
+            self.context.logger.error(
+                f"Error while retrieving the count value: {response_msg}"
+            )
+            return None
+
+        count = response_msg.raw_transaction.body.get("count", None)
+
+        # Ensure that the count is not None
+        if count is None:
+            self.context.logger.error(
+                f"Error while retrieving the count:  {response_msg}"
+            )
+            return None
+
+        return count
 
 
 class LearningRoundBehaviour(AbstractRoundBehaviour):
