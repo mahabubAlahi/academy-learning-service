@@ -769,10 +769,15 @@ class NewTxPreparationBehaviour(
         if last_number in [0, 1, 2, 3]:
             tx_hash = yield from self.get_native_transfer_safe_tx_hash()
             return tx_hash
-        else:
+        # Add increment counter transaction
+        if last_number in [4, 5, 6]:
             tx_hash = yield from self.get_increment_counter_safe_tx_hash()
             return tx_hash
 
+        # Multisend transaction (both native and Counter)
+        self.context.logger.info("Preparing a multisend transaction")
+        tx_hash = yield from self.get_multisend_safe_tx_hash()
+        return tx_hash
 
 
     def get_native_transfer_safe_tx_hash(self) -> Generator[None, None, Optional[str]]:
@@ -849,6 +854,75 @@ class NewTxPreparationBehaviour(
         data_hex = data_bytes.hex()
         self.context.logger.info(f"Increment counter data is {data_hex}")
         return data_hex
+    
+    def get_multisend_safe_tx_hash(self) -> Generator[None, None, Optional[str]]:
+        """Get a multisend transaction hash"""
+        # Step 1: we prepare a list of transactions
+        # Step 2: we pack all the transactions in a single one using the mulstisend contract
+        # Step 3: we wrap the multisend call inside a Safe call, as always
+
+        multi_send_txs = []
+
+        # Native transfer
+        native_transfer_data = self.get_native_transfer_data()
+        multi_send_txs.append(
+            {
+                "operation": MultiSendOperation.CALL,
+                "to": self.params.transfer_target_address,
+                "value": native_transfer_data[VALUE_KEY],
+                # No data key in this transaction, since it is a native transfer
+            }
+        )
+
+        # Increment counter
+        increment_counter_data_hex = yield from self.get_increment_counter_data()
+
+        if increment_counter_data_hex is None:
+            return None
+
+        multi_send_txs.append(
+            {
+                "operation": MultiSendOperation.CALL,
+                "to": self.params.counter_address,
+                "value": ZERO_VALUE,
+                "data": bytes.fromhex(increment_counter_data_hex),
+            }
+        )
+
+        # Multisend call
+        contract_api_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+            contract_address=self.params.multisend_address,
+            contract_id=str(MultiSendContract.contract_id),
+            contract_callable="get_tx_data",
+            multi_send_txs=multi_send_txs,
+            chain_id=GNOSIS_CHAIN_ID,
+        )
+
+        # Check for errors
+        if (
+            contract_api_msg.performative
+            != ContractApiMessage.Performative.RAW_TRANSACTION
+        ):
+            self.context.logger.error(
+                f"Could not get Multisend tx hash. "
+                f"Expected: {ContractApiMessage.Performative.RAW_TRANSACTION.value}, "
+                f"Actual: {contract_api_msg.performative.value}"
+            )
+            return None
+
+        # Extract the multisend data and strip the 0x
+        multisend_data = cast(str, contract_api_msg.raw_transaction.body["data"])[2:]
+        self.context.logger.info(f"Multisend data is {multisend_data}")
+
+        # Prepare the Safe transaction
+        safe_tx_hash = yield from self._build_safe_tx_hash(
+            to_address=self.params.multisend_address,
+            value=ZERO_VALUE,  # the safe is not moving any native value into the multisend
+            data=bytes.fromhex(multisend_data),
+            operation=SafeOperation.DELEGATE_CALL.value,  # we are delegating the call to the multisend contract
+        )
+        return safe_tx_hash
     
     def _build_safe_tx_hash(
         self,
