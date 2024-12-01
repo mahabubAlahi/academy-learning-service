@@ -760,8 +760,19 @@ class NewTxPreparationBehaviour(
     def get_tx_hash(self) -> Generator[None, None, Optional[str]]:
         """Get the transaction hash"""
 
-        tx_hash = yield from self.get_native_transfer_safe_tx_hash()
-        return tx_hash
+        # Again, make a decision based on the timestamp (on its last number)
+        now = int(self.get_sync_timestamp())
+        self.context.logger.info(f"Timestamp is {now}")
+        last_number = int(str(now)[-1])
+
+        # Native transaction (Safe -> recipient)
+        if last_number in [0, 1, 2, 3]:
+            tx_hash = yield from self.get_native_transfer_safe_tx_hash()
+            return tx_hash
+        else:
+            tx_hash = yield from self.get_increment_counter_safe_tx_hash()
+            return tx_hash
+
 
 
     def get_native_transfer_safe_tx_hash(self) -> Generator[None, None, Optional[str]]:
@@ -783,6 +794,61 @@ class NewTxPreparationBehaviour(
         data = {VALUE_KEY: 1, TO_ADDRESS_KEY: self.params.transfer_target_address}
         self.context.logger.info(f"Native transfer data is {data}")
         return data
+    
+    def get_increment_counter_safe_tx_hash(self) -> Generator[None, None, Optional[str]]:
+        """Increment counter safe transaction"""
+
+        # Transaction data
+        data_hex = yield from self.get_increment_counter_data()
+
+        # Check for errors
+        if data_hex is None:
+            return None
+
+        # Prepare safe transaction
+        safe_tx_hash = yield from self._build_safe_tx_hash(
+            to_address=self.params.counter_address, data=bytes.fromhex(data_hex)
+        )
+
+        self.context.logger.info(f"Increment counter hash is {safe_tx_hash}")
+
+        return safe_tx_hash
+
+    def get_increment_counter_data(self) -> Generator[None, None, Optional[str]]:
+        """Get the Increment counter transaction data"""
+
+        self.context.logger.info("Preparing Increment counter transaction")
+
+        # Use the contract api to interact with the Counter contract
+        response_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+            contract_address=self.params.counter_address,
+            contract_id=str(Counter.contract_id),
+            contract_callable="increment_counter_tx",
+            chain_id=GNOSIS_CHAIN_ID,
+        )
+
+        # Check that the response is what we expect
+        if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
+            self.context.logger.error(
+                f"Error while retrieving the increment counter: {response_msg}"
+            )
+            return None
+
+        data_bytes: Optional[bytes] = response_msg.raw_transaction.body.get(
+            "data", None
+        )
+
+        # Ensure that the data is not None
+        if data_bytes is None:
+            self.context.logger.error(
+                f"Error while preparing the transaction: {response_msg}"
+            )
+            return None
+
+        data_hex = data_bytes.hex()
+        self.context.logger.info(f"Increment counter data is {data_hex}")
+        return data_hex
     
     def _build_safe_tx_hash(
         self,

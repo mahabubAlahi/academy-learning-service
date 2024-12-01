@@ -47,3 +47,14 @@ class Counter(Contract):
         get_count = getattr(contract_instance.functions, "getCount")  # noqa
         count_value = get_count().call()
         return dict(count=count_value)
+    
+    @classmethod
+    def increment_counter_tx(
+        cls,
+        ledger_api: EthereumApi,
+        contract_address: str,
+    ) -> Dict[str, bytes]:
+        """Increment counter transaction."""
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+        data = contract_instance.encodeABI("incrementCounter")
+        return {"data": bytes.fromhex(data[2:])}
