@@ -9,7 +9,7 @@ fingerprint:
   README.md: bafybeicupvzoomkzigfqicpl4h5c3l7pq22t5yoezhjtopp63amcgyyvm4
   __init__.py: bafybeihv3sezgp6dntliu3ep5sskriht3kfxk4hfrnwxwdhd6f4bt5hmte
   build/Counter.json: bafybeig7go5asrnxfae6pyjde5jfp2vmo4ifgwx6plym6vruvijpnhv3tm
-  contract.py: bafybeiaju2qbfyfparrkkjij3u24bmsmy2x2hws2ofq5rwiyowdgji424m
+  contract.py: bafybeid66tctujmenarmr3y7452tvms3izpkdu7svcxhoo6lfx2enxuzdq
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: Counter
