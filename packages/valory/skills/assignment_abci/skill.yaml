@@ -1,36 +1,36 @@
-name: learning_abci
-author: valory
+name: assignment_abci
+author: author
 version: 0.1.0
 type: skill
-description: A learning skill.
+description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiho3lkochqpmes4f235chq26oggmwnol3vjuvhosleoubbjirbwaq
-  behaviours.py: bafybeicjufocmvlfo7zfsxnbp5xw3zgdtosxbvo2sm2safymxxbcridhju
-  dialogues.py: bafybeifqjbumctlffx2xvpga2kcenezhe47qhksvgmaylyp5ypwqgfar5u
-  fsm_specification.yaml: bafybeigbbydxuqephdpatb3fp3sxnvr77bfvvo5hwjimxfpgyl32wupe64
-  handlers.py: bafybeigjadr4thz6hfpfx5abezbwnqhbxmachf4efasrn4z2vqhsqgnyvi
-  models.py: bafybeidab23zxnxiu3synehetttdutlrmzayq5trsxqxk2p24yl6vlwtpq
-  payloads.py: bafybeico7vgbndzndtgyn23btd7m73wrjhbdjyrmcgg4nrrq243rugwj7a
-  rounds.py: bafybeia7q5lfseeu2wpzmq5gyawd3r4fdxqanj3jkrhkqlnovmm2cvnre4
+  __init__.py: bafybeie7ak2noomffpvdgjqxflna4ag26awthkirxvslc5u77ojcxbmwoa
+  behaviours.py: bafybeibkab7r2nukpxpx24iyfzko6nsf7wrlpa4hrc2mw2rzjhsqw562sm
+  dialogues.py: bafybeibjmpptkn6c32gfuo4atyixcrms3t7a3o5wmmelczhjm7mmxtwoo4
+  fsm_specification.yaml: bafybeif7schlybrj6lpzwgqcwvooig2osbaxwbort6obwz24bif3l6q74q
+  handlers.py: bafybeieemk3wiq4gmbnpwsrb6726sralshsx4o6ib2jjjtflxxsrrp5jaa
+  models.py: bafybeib5rm4byfilh62tp73wumfqmmpnqsttb46xzbscr74phncy3umi7i
+  payloads.py: bafybeicvlc3hlzpca5cz2zi7ha5kylqqlyij5vjb3l5tlmbckcnotza22i
+  rounds.py: bafybeidqfjfaz2ytik2c6fv6vdne3363yhxki2gnaydkii5ekku7vjezxu
+  tests/__init__.py: bafybeifigp64li3j3yidpan5arc27etm3jytadjsckjaidrem57hst73ry
+  tests/test_behaviours.py: bafybeibtcv4mpkvp6zjmlvdiekiytv44ohiti76p3e2kpuumoit75kmdkq
+  tests/test_dialogues.py: bafybeihazcivj7ak6kecxuool6apnieeqcjybsknwdtstsigxdcxcskihi
+  tests/test_handlers.py: bafybeidos5mngrgh3v6sxz4ibpfmdp4h4qizdbnyw5iwpag5rxvy56lrue
+  tests/test_models.py: bafybeigct4aettmsabkkhquga76os5kfdlorwhlwzbtiq5wk3ywb7dnk6y
+  tests/test_payloads.py: bafybeigtjtrw3fvs4tmdxkedp647kdqvebya33mrt5d73txmlmvqbgb764
+  tests/test_rounds.py: bafybeiefyyr7v5pnobnod4jzrtctbir5e55clbvinhjlisr5g566ncnhc4
 fingerprint_ignore_patterns: []
 connections: []
-contracts:
-- valory/gnosis_safe:0.1.0:bafybeib375xmvcplw7ageic2np3hq4yqeijrvd5kl7rrdnyvswats6ngmm
-- valory/erc20:0.1.0:bafybeibyhuxozkkvsymqz45vxixr3w3bs4vsvxg2nsx5jlyi3f3hhn7ezi
-- valory/counter:0.1.0:bafybeibeu4eod47c4jpnk7vz25aqbqanzn44h2ogtsf7q46e47qasnn7kq
-- valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
-protocols:
-- valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
-- valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
+contracts: []
+protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiajjzuh6vf23crp55humonknirvv2f4s3dmdlfzch6tc5ow52pcgm
-- valory/transaction_settlement_abci:0.1.0:bafybeielv6eivt2z6nforq43xewl2vmpfwpdu2s2vfogobziljnwsclmlm
 behaviours:
   main:
     args: {}
-    class_name: LearningRoundBehaviour
+    class_name: TestRoundBehaviour
 handlers:
   abci:
     args: {}
@@ -110,7 +110,7 @@ models:
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
-      service_id: learning
+      service_id: test
       service_registry_address: null
       setup:
         all_participants:
@@ -126,30 +126,8 @@ models:
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
       validate_timeout: 1205
-      service_endpoint_base: https://learning.autonolas.tech/
-      coingecko_price_template: https://api.coingecko.com/api/v3/simple/price?ids=autonolas&vs_currencies=usd&x_cg_demo_api_key={api_key}
       coingecko_api_key: null
-      transfer_target_address: '0x0000000000000000000000000000000000000000'
-      trigger: false
-      olas_token_address: '0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f'
-      counter_address: '0xbc588Df1B9D5a1dDBD20e65ab62e4bF4ce272cb0'
-      multisend_address: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761'
     class_name: Params
-  coingecko_specs:
-    args:
-      api_id: coingecko
-      headers:
-        Accept: application/json
-      method: GET
-      parameters:
-        ids: autonolas
-        vs_currencies: usd
-        x_cg_demo_api_key: null
-      response_key: autonolas
-      response_type: dict
-      retries: 5
-      url: https://api.coingecko.com/api/v3/simple/price
-    class_name: CoingeckoSpecs
   coingecko_public_company_holdings_specs:
     args:
       api_id: coingeckopublic
@@ -175,5 +153,5 @@ models:
     args: {}
     class_name: TendermintDialogues
 dependencies: {}
-is_abstract: true
+is_abstract: false
 customs: []

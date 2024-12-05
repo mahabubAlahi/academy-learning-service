@@ -20,6 +20,7 @@
 """This package contains round behaviours of LearningChainedSkillAbciApp."""
 
 import packages.valory.skills.learning_abci.rounds as LearningAbci
+import packages.valory.skills.assignment_abci.rounds as TestAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
 import packages.valory.skills.transaction_settlement_abci.rounds as TxSettlementAbci
@@ -37,6 +38,8 @@ from packages.valory.skills.termination_abci.rounds import (
 
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: LearningAbci.DataPullRound,
+    LearningAbci.FinishedDataPullRound: TestAbci.NewDataPullRound,
+    TestAbci.FinishedNewDataPullRoundRound: LearningAbci.DecisionMakingRound,
     LearningAbci.FinishedDecisionMakingRound: ResetAndPauseAbci.ResetAndPauseRound,
     LearningAbci.FinishedTxPreparationRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
     TxSettlementAbci.FinishedTransactionSubmissionRound: ResetAndPauseAbci.ResetAndPauseRound,

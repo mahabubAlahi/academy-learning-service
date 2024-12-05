@@ -149,29 +149,6 @@ class DataPullRound(CollectSameUntilThresholdRound):
     )
 
     # Event.ROUND_TIMEOUT  # this needs to be referenced for static checkers
-class NewDataPullRound(CollectSameUntilThresholdRound):
-    """NewDataPullRound"""
-
-    payload_class = NewDataPullPayload
-    synchronized_data_class = SynchronizedData
-    done_event = Event.DONE
-    no_majority_event = Event.NO_MAJORITY
-
-    # Collection key specifies where in the synchronized data the agento to payload mapping will be stored
-    collection_key = get_name(SynchronizedData.participant_to_data_round)
-
-    # Selection key specifies how to extract all the different objects from each agent's payload
-    # and where to store it in the synchronized data. Notice that the order follows the same order
-    # from the payload class.
-    selection_key = (
-        get_name(SynchronizedData.total_holdings),
-        get_name(SynchronizedData.total_value_usd),
-        get_name(SynchronizedData.market_cap_dominance),
-        get_name(SynchronizedData.public_company_holdings_ipfs_hash),
-    )
-
-    # Event.ROUND_TIMEOUT  # this needs to be referenced for static checkers
-
 
 class DecisionMakingRound(CollectSameUntilThresholdRound):
     """DecisionMakingRound"""
@@ -234,6 +211,8 @@ class FinishedDecisionMakingRound(DegenerateRound):
 
 class FinishedTxPreparationRound(DegenerateRound):
     """FinishedLearningRound"""
+class FinishedDataPullRound(DegenerateRound):
+    """FinishedDataPullRound"""
 
 
 class LearningAbciApp(AbciApp[Event]):
@@ -247,12 +226,7 @@ class LearningAbciApp(AbciApp[Event]):
         DataPullRound: {
             Event.NO_MAJORITY: DataPullRound,
             Event.ROUND_TIMEOUT: DataPullRound,
-            Event.DONE: NewDataPullRound,
-        },
-        NewDataPullRound: {
-            Event.NO_MAJORITY: NewDataPullRound,
-            Event.ROUND_TIMEOUT: NewDataPullRound,
-            Event.DONE: DecisionMakingRound,
+            Event.DONE: FinishedDataPullRound,
         },
         DecisionMakingRound: {
             Event.NO_MAJORITY: DecisionMakingRound,
@@ -274,10 +248,12 @@ class LearningAbciApp(AbciApp[Event]):
         },
         FinishedDecisionMakingRound: {},
         FinishedTxPreparationRound: {},
+        FinishedDataPullRound: {},
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingRound,
         FinishedTxPreparationRound,
+        FinishedDataPullRound,
     }
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
@@ -286,5 +262,6 @@ class LearningAbciApp(AbciApp[Event]):
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedDecisionMakingRound: set(),
+        FinishedDataPullRound: set(),
         FinishedTxPreparationRound: {get_name(SynchronizedData.most_voted_tx_hash)},
     }
