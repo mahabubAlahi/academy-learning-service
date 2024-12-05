@@ -4,6 +4,7 @@
         "contract/valory/counter/0.1.0": "bafybeibeu4eod47c4jpnk7vz25aqbqanzn44h2ogtsf7q46e47qasnn7kq",
         "skill/valory/learning_abci/0.1.0": "bafybeihsdfxkldnvytqf7atfwf3jpdkseecm7iccbikroaot5aakf6agd4",
         "skill/valory/learning_chained_abci/0.1.0": "bafybeieut7sdymttna5dpqtb4mcyavfc7xbpy64wgso5nlidw4zcbka2dy",
+        "skill/valory/assignment_abci/0.1.0": "bafybeiergdmqacpswzrxl4lnmpp5vlfktr7i7fnt6ldprcfrbddxcx7qqm",
         "agent/valory/learning_agent/0.1.0": "bafybeig6enlvgmppm2c2zep5ranux453rn45ehwef7hfer6wxbrhr7c62q",
         "service/valory/learning_service/0.1.0": "bafybeicckmllispx6piojxk4w2kmakq6bh3raddzaljizixq34aidpkx2e"
     },

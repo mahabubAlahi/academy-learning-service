@@ -1,0 +1,17 @@
+alphabet_in:
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: NewDataPullRound
+final_states:
+- FinishedNewDataPullRoundRound
+label: TestAbciApp
+start_states:
+- NewDataPullRound
+states:
+- NewDataPullRound
+- FinishedNewDataPullRoundRound
+transition_func:
+    (NewDataPullRound, DONE): FinishedNewDataPullRoundRound
+    (NewDataPullRound, NO_MAJORITY): NewDataPullRound
+    (NewDataPullRound, ROUND_TIMEOUT): NewDataPullRound
